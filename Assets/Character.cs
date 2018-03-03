@@ -1,0 +1,28 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
+using System.IO;
+
+[Serializable]
+public class Character  {
+
+    private string name;
+
+    private CharacterType type;
+
+    public Character(string n, CharacterType t)
+    {
+        name = n;
+
+        type = t;
+    }
+
+    public string GetName()
+    {
+        return name;
+    }
+
+}

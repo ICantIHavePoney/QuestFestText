@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
@@ -7,78 +8,291 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public struct UdpState{
-	public IPEndPoint i;
-	public UdpClient c;
-}
-
 public class NetworkManager : MonoBehaviour {
 
 	private UdpClient client;
 
-	private int port = 6060;
+    public static NetworkManager instance;
 
-	private IPAddress addressToConnect;
+	private int serverPort = 60;
 
-	private string inputAddress;
+    private int clientPort = 6060;
 
-	private bool isHost = false;
+	private IPEndPoint addressToConnect;
+
+    private string inputAddress = "127.0.0.1";
+
+	public bool isHost;
 
 	private bool gameLaunched = false;
 
 	private int roomSize;
 
-	private Dictionary<IPEndPoint, string> connectedClients;
+    Character newChara;
+
+    private string nickname;
+
+    [SerializeField]
+    private float timeBeforeDisconnect;
+
+    private Dictionary<IPEndPoint, Character> connectedClients;
+
+    private Dictionary<IPEndPoint, Coroutine> disconnectRoutines;
+
+    private float serverLastMessage;
+
+    private List<Character> otherCharacters;
+
+    private AsyncCallback callback;
+
+    private bool isConnected = false;
 
 	void Awake()
 	{
-		connectedClients = new Dictionary<IPEndPoint, string>();
-	}
+		connectedClients = new Dictionary<IPEndPoint, Character>();
+        disconnectRoutines = new Dictionary<IPEndPoint, Coroutine>();
+        otherCharacters = new List<Character>();
+
+        callback = new AsyncCallback(ReceiveCallback);
+    }
 
 	// Use this for initialization
 	void Start () {
+        if(instance != this)
+        {
+            Destroy(instance);
+        }
+
+        //StartDisconnectionRoutine();
+
+        instance = this;
 		Application.runInBackground = true;
+        //Init();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
 	}
 
-	private void Init(){
-		client = new UdpClient(port);
-		UdpState state = new UdpState();
-		state.c = client;
-		if(isHost){
-			addressToConnect = IPAddress.Any;
-		}
-		else {
-			addressToConnect = IPAddress.Parse(inputAddress);
-		}
-		state.i = new IPEndPoint(addressToConnect, port);
-		state.c.BeginReceive(new AsyncCallback(ReceiveCallback), state);
-	}
+	public void Init(){
 
+        if (isHost)
+        {
+            Debug.Log("Server");
+            //addressToConnect = new IPEndPoint(IPAddress.Any, clientPort);
+            client = new UdpClient(serverPort);
+        }
+        else
+        {
+            Debug.Log("Client");
+            client = new UdpClient(clientPort);
+            addressToConnect = new IPEndPoint(IPAddress.Parse(inputAddress), serverPort);
+
+            newChara = new Character("Nayos", CharacterType.Player);
+
+            byte[] message = GetMessage(MessageType.connection, newChara.ToBytesArray());
+
+            client.Send(message, message.Length, addressToConnect);
+
+
+            StartCoroutine(ConnectCheck());
+
+        }
+        client.BeginReceive(callback, null);
+        
+      
+
+        
+	}
 
 	public void ReceiveCallback(IAsyncResult ar)
 	{
-		try{
-			UdpState state = (UdpState)(ar.AsyncState);
-			UdpClient client = state.c;
-			IPEndPoint clientInfo = state.i;
-		}
-		catch (ObjectDisposedException)
-		{
-			Debug.Log("Connexion closed");
-		}
-		catch (Exception err)
-		{
-			Debug.Log(err);
-		}
-	}
+        try
+        {
+            Debug.Log("Message reçu");
+            IPEndPoint senderInfo = new IPEndPoint(0, 0);
+
+            byte[] message = client.EndReceive(ar, ref senderInfo);
+
+             if (isHost)
+            {
+                if (disconnectRoutines.ContainsKey(senderInfo))
+                {
+                    StopCoroutine(disconnectRoutines[senderInfo]);
+                }
+            }       
+
+            MessageType type = ParseMessageType(message);
+
+            message = message.Slice(4);
+
+            switch (type)
+            {
+                case MessageType.connection:
+                    if (!gameLaunched /*&& connectedClients.Count < roomSize*/)
+                    {
+                        Character newCharacter = (Character)message.ToObject();
+                        if (isHost)
+                        {
+
+                            message = GetMessage(MessageType.connection, newCharacter.ToBytesArray());
+
+                            if (!connectedClients.ContainsKey(senderInfo))
+                            {
+                                connectedClients.Add(senderInfo, newCharacter);
+                            }
+
+                            ServerToOthers(message, senderInfo);
+
+                            message = GetMessage(MessageType.connection, new byte[0]);
+
+                            client.Send(message, message.Length, senderInfo);    
+
+                            Debug.Log(newCharacter.GetName() + "S'est connecté");
+
+                        }
+                        else
+                        {
+                            if (newCharacter != null)
+                            {
+                                otherCharacters.Add(newCharacter);
+                            }
+                            else
+                            {
+                                //MainThreadExec.stuffToExecute.Enqueue(() => StopAllCoroutines());
+                                MenuManager.instance.ConnectSuccess();
+                                Debug.Log("On est bien connecté !");
+
+                            }
+                        }
+                    }
+                    break;
+                case MessageType.disconnection:
+                    Character disconnectedOne = (Character)message.ToObject();
+                    if (isHost)
+                    {
+                        message = GetMessage(MessageType.disconnection, disconnectedOne.ToBytesArray());
+
+                        ServerToOthers(message, senderInfo);
+                        connectedClients.Remove(senderInfo);
+
+                        Debug.Log(disconnectedOne.GetName() + "S'est déconnecté");
+                    }
+
+                    else
+                    {
+                        Debug.Log("Vous avez été déconnecté");
+                        otherCharacters.Remove(disconnectedOne);
+                    }
+                    break;
+            }
+
+            if (isHost)
+            {
+                MainThreadExec.stuffToExecute.Enqueue(() =>
+                {
+                    Coroutine routine = StartCoroutine(AfkDisconnect(senderInfo));
 
 
-	public void SendToOthers(UdpState client){
+                    if (disconnectRoutines.ContainsKey(senderInfo))
+                    {
+                        disconnectRoutines[senderInfo] = routine;
+                    }
+                    else
+                    {
+                        disconnectRoutines.Add(senderInfo, routine);
+                    }
+
+                });
+            }
+            client.BeginReceive(callback, null);
+        }
+        catch (ObjectDisposedException)
+        {
+            Debug.Log("Connection closed");
+        }
+        catch(Exception err)
+        {
+            Debug.Log(err);
+        }
 		
 	}
+
+    private IEnumerator AfkDisconnect(IPEndPoint clientIP)
+    {
+        yield return new WaitForSeconds(10);
+        Character disconnectedChar;
+        connectedClients.TryGetValue(clientIP, out disconnectedChar);
+
+        byte[] message = GetMessage(MessageType.disconnection, disconnectedChar.ToBytesArray());
+
+        client.Send(message, message.Length, clientIP);
+
+        Debug.Log(disconnectedChar.GetName() + " à été déconnecté");
+
+        connectedClients.Remove(clientIP);
+
+    }
+
+
+
+    public byte[] GetMessage(MessageType type, byte[] contentArray)
+    {
+        byte[] message = new byte[4 + contentArray.Length];
+
+        byte[] messageTypeArray = BitConverter.GetBytes((int)type);
+
+        messageTypeArray.CopyTo(message, 0);
+
+        contentArray.CopyTo(message, 4);
+
+        return message;
+    }
+
+    private MessageType ParseMessageType(byte[] message)
+    {
+        byte[] messageTypeArray = new byte[4];
+
+        Array.Copy(message, 0, messageTypeArray, 0, messageTypeArray.Length);
+
+        MessageType type = (MessageType)BitConverter.ToInt32(messageTypeArray, 0);
+
+        return type;
+    }
+
+    private IEnumerator ConnectCheck()
+    {
+        yield return new WaitForSeconds(10);
+        isConnected = false;
+        addressToConnect = new IPEndPoint(0, 0);
+        Debug.Log("L'adresse n'est pas bonne ou le serveur n'est pas en ligne");
+        MenuManager.instance.ConnectFailed();
+
+    }
+
+    private void ServerToOthers(byte[] message, IPEndPoint clientToExclude){
+
+
+
+        foreach(var clientItem in connectedClients.Keys)
+        {
+            if(clientItem != clientToExclude)
+            {
+                client.Send(message, message.Length, clientItem);
+            }
+        }
+	}
+
+    private void ServerToAll(byte[] message)
+    {
+        foreach(var clientItem in connectedClients.Keys)
+        {
+            client.Send(message, message.Length, clientItem);
+        }
+    }
+
+    public void SetAdressInput(string ip)
+    {
+        inputAddress = ip;
+    }
 }

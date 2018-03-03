@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-enum MessageType{
+public enum MessageType{
 
 	connection,
 	disconnection,
-	attack,
-	magic,
-	useItem,
-	chatMessage
+    beginCombat,
+	attack
 
+}
+
+public enum CharacterType
+{
+    Player,
+    Enemy
 }

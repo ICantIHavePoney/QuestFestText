@@ -1,0 +1,197 @@
+Mono path[0] = 'C:/Users/Nayos/Documents/QuestFestText/Build_Data/Managed'
+Mono path[1] = 'C:/Users/Nayos/Documents/QuestFestText/Build_Data/Mono'
+Mono config path = 'C:/Users/Nayos/Documents/QuestFestText/Build_Data/Mono/etc'
+PlayerConnection initialized from C:/Users/Nayos/Documents/QuestFestText/Build_Data (debug = 0)
+PlayerConnection initialized network socket : 0.0.0.0 55135
+Multi-casting "[IP] 0.0.0.0 [Port] 55135 [Flags] 3 [Guid] 2066834024 [EditorId] 4132784951 [Version] 1048832 [Id] WindowsPlayer(Mj�lnir) [Debug] 1" to [225.0.0.222:54997]...
+Waiting for connection from host on [0.0.0.0:55135]...
+Timed out. Continuing without host connection.
+Started listening to [0.0.0.0:55135]
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,defer=y,address=0.0.0.0:56024
+PlayerConnection already initialized - listening to [0.0.0.0:55135]
+Player data archive not found at `C:/Users/Nayos/Documents/QuestFestText/Build_Data/data.unity3d`, using local filesystemInitialize engine version: 5.6.1f1 (2860b30f0b54)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce GTX 970M (ID=0x13d8)
+    Vendor:   NVIDIA
+    VRAM:     3072 MB
+    Driver:   22.21.13.8569
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\Nayos\Documents\QuestFestText\Build_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\Nayos\Documents\QuestFestText\Build_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\Nayos\Documents\QuestFestText\Build_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\Nayos\Documents\QuestFestText\Build_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\Nayos\Documents\QuestFestText\Build_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\Nayos\Documents\QuestFestText\Build_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\Nayos\Documents\QuestFestText\Build_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Users\Nayos\Documents\QuestFestText\Build_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+- Completed reload, in  0.037 seconds
+Platform assembly: C:\Users\Nayos\Documents\QuestFestText\Build_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\Nayos\Documents\QuestFestText\Build_Data\Managed\System.dll (this message is harmless)
+desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 1.249973 ms
+Setting up 4 worker threads for Enlighten.
+  Thread -> id: 297c -> priority: 1 
+  Thread -> id: 235c -> priority: 1 
+  Thread -> id: 2a10 -> priority: 1 
+  Thread -> id: 2a90 -> priority: 1 
+Client
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+NetworkManager:Init() (at C:\Users\Nayos\Documents\QuestFestText\Assets\NetworkManager.cs:87)
+MenuManager:OnConnectButtonClick() (at C:\Users\Nayos\Documents\QuestFestText\Assets\MenuManager.cs:56)
+UnityEngine.Events.InvokableCall:Invoke(Object[]) (at C:\buildslave\unity\build\Runtime\Export\UnityEvent.cs:154)
+UnityEngine.Events.InvokableCallList:Invoke(Object[]) (at C:\buildslave\unity\build\Runtime\Export\UnityEvent.cs:637)
+UnityEngine.Events.UnityEventBase:Invoke(Object[]) (at C:\buildslave\unity\build\Runtime\Export\UnityEvent.cs:773)
+UnityEngine.Events.UnityEvent:Invoke() (at C:\buildslave\unity\build\Runtime\Export\UnityEvent_0.cs:52)
+UnityEngine.UI.Button:Press() (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\UI\Core\Button.cs:35)
+UnityEngine.UI.Button:OnPointerClick(PointerEventData) (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\UI\Core\Button.cs:44)
+UnityEngine.EventSystems.ExecuteEvents:Execute(IPointerClickHandler, BaseEventData) (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\ExecuteEvents.cs:50)
+UnityEngine.EventSystems.ExecuteEvents:Execute(GameObject, BaseEventData, EventFunction`1) (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\ExecuteEvents.cs:261)
+UnityEngine.EventSystems.StandaloneInputModule:ProcessMousePress(MouseButtonEventData) (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\InputModules\StandaloneInputModule.cs:533)
+UnityEngine.EventSystems.StandaloneInputModule:ProcessMouseEvent(Int32) (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\InputModules\StandaloneInputModule.cs:432)
+UnityEngine.EventSystems.StandaloneInputModule:ProcessMouseEvent() (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\InputModules\StandaloneInputModule.cs:412)
+UnityEngine.EventSystems.StandaloneInputModule:Process() (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\InputModules\StandaloneInputModule.cs:186)
+UnityEngine.EventSystems.EventSystem:Update() (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\EventSystem.cs:283)
+ 
+(Filename: C:/Users/Nayos/Documents/QuestFestText/Assets/NetworkManager.cs Line: 87)
+
+Message reçu
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+NetworkManager:ReceiveCallback(IAsyncResult) (at C:\Users\Nayos\Documents\QuestFestText\Assets\NetworkManager.cs:112)
+System.Net.Sockets.SocketAsyncResult:Complete() (at /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs:205)
+System.Net.Sockets.SocketAsyncResult:Complete(Int32) (at /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs:234)
+System.Net.Sockets.Worker:ReceiveFrom() (at /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs:515)
+ 
+(Filename: /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs Line: 205)
+
+C'est bon ! on charge le perso now !
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MenuManager:ConnectSuccess() (at C:\Users\Nayos\Documents\QuestFestText\Assets\MenuManager.cs:62)
+NetworkManager:ReceiveCallback(IAsyncResult) (at C:\Users\Nayos\Documents\QuestFestText\Assets\NetworkManager.cs:160)
+System.Net.Sockets.SocketAsyncResult:Complete() (at /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs:205)
+System.Net.Sockets.SocketAsyncResult:Complete(Int32) (at /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs:234)
+System.Net.Sockets.Worker:ReceiveFrom() (at /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs:515)
+ 
+(Filename: /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs Line: 205)
+
+On est bien connecté !
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+NetworkManager:ReceiveCallback(IAsyncResult) (at C:\Users\Nayos\Documents\QuestFestText\Assets\NetworkManager.cs:161)
+System.Net.Sockets.SocketAsyncResult:Complete() (at /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs:205)
+System.Net.Sockets.SocketAsyncResult:Complete(Int32) (at /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs:234)
+System.Net.Sockets.Worker:ReceiveFrom() (at /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs:515)
+ 
+(Filename: /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs Line: 205)
+
+Client
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+NetworkManager:Init() (at C:\Users\Nayos\Documents\QuestFestText\Assets\NetworkManager.cs:87)
+MenuManager:OnConnectButtonClick() (at C:\Users\Nayos\Documents\QuestFestText\Assets\MenuManager.cs:56)
+UnityEngine.Events.InvokableCall:Invoke(Object[]) (at C:\buildslave\unity\build\Runtime\Export\UnityEvent.cs:154)
+UnityEngine.Events.InvokableCallList:Invoke(Object[]) (at C:\buildslave\unity\build\Runtime\Export\UnityEvent.cs:637)
+UnityEngine.Events.UnityEventBase:Invoke(Object[]) (at C:\buildslave\unity\build\Runtime\Export\UnityEvent.cs:773)
+UnityEngine.Events.UnityEvent:Invoke() (at C:\buildslave\unity\build\Runtime\Export\UnityEvent_0.cs:52)
+UnityEngine.UI.Button:Press() (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\UI\Core\Button.cs:35)
+UnityEngine.UI.Button:OnPointerClick(PointerEventData) (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\UI\Core\Button.cs:44)
+UnityEngine.EventSystems.ExecuteEvents:Execute(IPointerClickHandler, BaseEventData) (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\ExecuteEvents.cs:50)
+UnityEngine.EventSystems.ExecuteEvents:Execute(GameObject, BaseEventData, EventFunction`1) (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\ExecuteEvents.cs:261)
+UnityEngine.EventSystems.StandaloneInputModule:ProcessMousePress(MouseButtonEventData) (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\InputModules\StandaloneInputModule.cs:533)
+UnityEngine.EventSystems.StandaloneInputModule:ProcessMouseEvent(Int32) (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\InputModules\StandaloneInputModule.cs:432)
+UnityEngine.EventSystems.StandaloneInputModule:ProcessMouseEvent() (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\InputModules\StandaloneInputModule.cs:412)
+UnityEngine.EventSystems.StandaloneInputModule:Process() (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\InputModules\StandaloneInputModule.cs:186)
+UnityEngine.EventSystems.EventSystem:Update() (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\EventSystem.cs:283)
+ 
+(Filename: C:/Users/Nayos/Documents/QuestFestText/Assets/NetworkManager.cs Line: 87)
+
+SocketException: Une seule utilisation de chaque adresse de socket (protocole/adresse réseau/port) est habituellement autorisée.
+
+  at System.Net.Sockets.Socket.Bind (System.Net.EndPoint local_end) [0x00086] in /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs:1819 
+  at System.Net.Sockets.UdpClient.InitSocket (System.Net.EndPoint localEP) [0x00037] in /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/UdpClient.cs:137 
+  at System.Net.Sockets.UdpClient..ctor (Int32 port) [0x0003d] in /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/UdpClient.cs:75 
+  at NetworkManager.Init () [0x00040] in C:\Users\Nayos\Documents\QuestFestText\Assets\NetworkManager.cs:88 
+  at MenuManager.OnConnectButtonClick () [0x00011] in C:\Users\Nayos\Documents\QuestFestText\Assets\MenuManager.cs:56 
+  at UnityEngine.Events.InvokableCall.Invoke (System.Object[] args) [0x00017] in C:\buildslave\unity\build\Runtime\Export\UnityEvent.cs:154 
+  at UnityEngine.Events.InvokableCallList.Invoke (System.Object[] parameters) [0x00056] in C:\buildslave\unity\build\Runtime\Export\UnityEvent.cs:637 
+  at UnityEngine.Events.UnityEventBase.Invoke (System.Object[] parameters) [0x0000e] in C:\buildslave\unity\build\Runtime\Export\UnityEvent.cs:773 
+  at UnityEngine.Events.UnityEvent.Invoke () [0x00008] in C:\buildslave\unity\build\Runtime\Export\UnityEvent_0.cs:52 
+  at UnityEngine.UI.Button.Press () [0x00022] in C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\UI\Core\Button.cs:35 
+  at UnityEngine.UI.Button.OnPointerClick (UnityEngine.EventSystems.PointerEventData eventData) [0x00012] in C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\UI\Core\Button.cs:44 
+  at UnityEngine.EventSystems.ExecuteEvents.Execute (IPointerClickHandler handler, UnityEngine.EventSystems.BaseEventData eventData) [0x00008] in C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\ExecuteEvents.cs:50 
+  at UnityEngine.EventSystems.ExecuteEvents.Execute[IPointerClickHandler] (UnityEngine.GameObject target, UnityEngine.EventSystems.BaseEventData eventData, UnityEngine.EventSystems.EventFunction`1 functor) [0x00073] in C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\ExecuteEvents.cs:261 
+UnityEngine.DebugLogHandler:Internal_LogException(Exception, Object)
+UnityEngine.DebugLogHandler:LogException(Exception, Object)
+UnityEngine.Logger:LogException(Exception, Object)
+UnityEngine.Debug:LogException(Exception)
+UnityEngine.EventSystems.ExecuteEvents:Execute(GameObject, BaseEventData, EventFunction`1) (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\ExecuteEvents.cs:265)
+UnityEngine.EventSystems.StandaloneInputModule:ProcessMousePress(MouseButtonEventData) (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\InputModules\StandaloneInputModule.cs:533)
+UnityEngine.EventSystems.StandaloneInputModule:ProcessMouseEvent(Int32) (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\InputModules\StandaloneInputModule.cs:432)
+UnityEngine.EventSystems.StandaloneInputModule:ProcessMouseEvent() (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\InputModules\StandaloneInputModule.cs:412)
+UnityEngine.EventSystems.StandaloneInputModule:Process() (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\InputModules\StandaloneInputModule.cs:186)
+UnityEngine.EventSystems.EventSystem:Update() (at C:\buildslave\unity\build\Extensions\guisystem\UnityEngine.UI\EventSystem\EventSystem.cs:283)
+ 
+(Filename: /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs Line: 1819)
+
+L'adresse n'est pas bonne ou le serveur n'est pas en ligne
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+<ConnectCheck>c__Iterator1:MoveNext() (at C:\Users\Nayos\Documents\QuestFestText\Assets\NetworkManager.cs:265)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at C:\buildslave\unity\build\Runtime\Export\Coroutines.cs:17)
+ 
+(Filename: C:/Users/Nayos/Documents/QuestFestText/Assets/NetworkManager.cs Line: 265)
+
+Hé merde, on est pas co
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MenuManager:ConnectFailed() (at C:\Users\Nayos\Documents\QuestFestText\Assets\MenuManager.cs:67)
+<ConnectCheck>c__Iterator1:MoveNext() (at C:\Users\Nayos\Documents\QuestFestText\Assets\NetworkManager.cs:266)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at C:\buildslave\unity\build\Runtime\Export\Coroutines.cs:17)
+ 
+(Filename: C:/Users/Nayos/Documents/QuestFestText/Assets/MenuManager.cs Line: 67)
+
+Message reçu
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+NetworkManager:ReceiveCallback(IAsyncResult) (at C:\Users\Nayos\Documents\QuestFestText\Assets\NetworkManager.cs:112)
+System.Net.Sockets.SocketAsyncResult:Complete() (at /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs:205)
+System.Net.Sockets.SocketAsyncResult:Complete(Int32) (at /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs:234)
+System.Net.Sockets.Worker:ReceiveFrom() (at /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs:515)
+ 
+(Filename: /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs Line: 205)
+
+Vous avez été déconnecté
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+NetworkManager:ReceiveCallback(IAsyncResult) (at C:\Users\Nayos\Documents\QuestFestText\Assets\NetworkManager.cs:181)
+System.Net.Sockets.SocketAsyncResult:Complete() (at /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs:205)
+System.Net.Sockets.SocketAsyncResult:Complete(Int32) (at /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs:234)
+System.Net.Sockets.Worker:ReceiveFrom() (at /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs:515)
+ 
+(Filename: /Users/builduser/buildslave/mono/build/mcs/class/System/System.Net.Sockets/Socket.cs Line: 205)
+
