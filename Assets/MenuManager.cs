@@ -3,20 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Text.RegularExpressions;
+using System;
 
 public class MenuManager : MonoBehaviour {
 
     [SerializeField]
-    private InputField IPInput;
+    private InputField IPInput; 
 
     public static MenuManager instance;
 
+    public GameObject MainMenuPanel;
+
+    public GameObject startGame;
+
+    public GameObject LobbyPanel;
+
+    public GameObject GamePanel;
+
+    public GameObject connectedCharsPanel;
+
+    public GameObject enemyDisplayPanel;
+
     [SerializeField]
-    private Text IPErrorText;
+    private Text ErrorText;
+
+    private int HeightOffset = 250;
+
+    public GameObject charPanel;
 
     private bool canConnect;
 
     private bool isConnected;
+
+    private Coroutine connectRoutineCheck;
 
 	// Use this for initialization
 	void Start () {
@@ -36,21 +55,28 @@ public class MenuManager : MonoBehaviour {
     {
         if (Regex.IsMatch(IPInput.text, "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$")) {
             NetworkManager.instance.SetAdressInput(IPInput.text);
-            IPErrorText.text = "Adresse IP Valide";
-            IPErrorText.color = Color.green;
+            ErrorText.text = "Adresse IP Valide";
+            ErrorText.color = Color.green;
             canConnect = true;
         }
         else
         {
-            IPErrorText.text = "Adresse IP non Valide";
-            IPErrorText.color = Color.red;
+            ErrorText.text = "Adresse IP non Valide";
+            ErrorText.color = Color.red;
             canConnect = false;
         }
     }
 
+
     public void OnHostButtonClick()
     {
         NetworkManager.instance.isHost = true;
+
+        MainMenuPanel.SetActive(false);
+
+        LobbyPanel.SetActive(true);
+
+        startGame.SetActive(true);
 
         NetworkManager.instance.Init();
     }
@@ -59,17 +85,57 @@ public class MenuManager : MonoBehaviour {
     {
         NetworkManager.instance.isHost = false;
 
-        NetworkManager.instance.Init();  
+        NetworkManager.instance.Init();
 
+        connectRoutineCheck = StartCoroutine(ConnectFailed());
+
+    }
+
+    public void DisplayConnectedChars(Character charToDisplay)
+    {
+
+        Transform parent; 
+        var temp = Instantiate(charPanel, connectedCharsPanel.transform);
+
+        if (charToDisplay.type == CharacterType.Player)
+        {
+            parent = connectedCharsPanel.transform;
+            temp.transform.position = new Vector3(parent.position.x, parent.position.y + HeightOffset, parent.position.z);
+            HeightOffset -= 125;
+        }
+        else
+        {
+            parent = enemyDisplayPanel.transform;
+            temp.transform.position = new Vector3(parent.position.x, parent.position.y, parent.position.z);
+        }
+        var tempScript = temp.GetComponent<CharacterPanel>();
+        tempScript.character = charToDisplay;
+        tempScript.DisplayCharacter();
     }
 
     public void ConnectSuccess()
     {
-        Debug.Log("C'est bon ! on charge le perso now !");
+        MainThreadExec.stuffToExecute.Enqueue(() =>
+        {
+            StopCoroutine(connectRoutineCheck);
+
+            MainMenuPanel.SetActive(false);
+
+            LobbyPanel.SetActive(true);
+
+            foreach(var item in NetworkManager.instance.otherCharacters)
+            {
+                DisplayConnectedChars(item);
+            }
+
+            DisplayConnectedChars(NetworkManager.instance.newChara);
+            Debug.Log("C'est bon ! on charge le perso now !");
+        });
     }
 
-    public void ConnectFailed()
+    public IEnumerator ConnectFailed()
     {
+        yield return new WaitForSeconds(10);
         Debug.Log("Hé merde, on est pas co");
     }
 }

@@ -11,13 +11,33 @@ public class Character  {
 
     private string name;
 
-    private CharacterType type;
+    public CharacterType type;
 
-    public Character(string n, CharacterType t)
+    public int strenght { get; set; }
+
+    public int agility { get; set; }
+
+    public int intelligence { get; set; }
+
+    public int health { get; set; }
+
+    public int maxHealth { get; set; }
+
+    public Character(string n, CharacterType t, int s, int a, int i, int h)
     {
         name = n;
 
         type = t;
+
+        strenght = s;
+
+        agility = a;
+
+        intelligence = i;
+
+        health = h;
+
+        maxHealth = h;
     }
 
     public string GetName()

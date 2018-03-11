@@ -20,28 +20,22 @@ public class NetworkManager : MonoBehaviour {
 
 	private IPEndPoint addressToConnect;
 
-    private string inputAddress = "127.0.0.1";
+    private string inputAddress;
 
 	public bool isHost;
 
 	private bool gameLaunched = false;
 
-	private int roomSize;
 
-    Character newChara;
+    public int roomSize = 3;
 
-    private string nickname;
-
-    [SerializeField]
-    private float timeBeforeDisconnect;
+    public Character newChara;
 
     private Dictionary<IPEndPoint, Character> connectedClients;
 
-    private Dictionary<IPEndPoint, Coroutine> disconnectRoutines;
-
     private float serverLastMessage;
 
-    private List<Character> otherCharacters;
+    public List<Character> otherCharacters;
 
     private AsyncCallback callback;
 
@@ -50,7 +44,6 @@ public class NetworkManager : MonoBehaviour {
 	void Awake()
 	{
 		connectedClients = new Dictionary<IPEndPoint, Character>();
-        disconnectRoutines = new Dictionary<IPEndPoint, Coroutine>();
         otherCharacters = new List<Character>();
 
         callback = new AsyncCallback(ReceiveCallback);
@@ -63,11 +56,9 @@ public class NetworkManager : MonoBehaviour {
             Destroy(instance);
         }
 
-        //StartDisconnectionRoutine();
 
         instance = this;
 		Application.runInBackground = true;
-        //Init();
 	}
 	
 	// Update is called once per frame
@@ -78,49 +69,30 @@ public class NetworkManager : MonoBehaviour {
 
         if (isHost)
         {
-            Debug.Log("Server");
-            //addressToConnect = new IPEndPoint(IPAddress.Any, clientPort);
             client = new UdpClient(serverPort);
         }
         else
         {
-            Debug.Log("Client");
             client = new UdpClient(clientPort);
             addressToConnect = new IPEndPoint(IPAddress.Parse(inputAddress), serverPort);
 
-            newChara = new Character("Nayos", CharacterType.Player);
+            newChara = new Character("Nayos", CharacterType.Player, UnityEngine.Random.Range(0, 11), UnityEngine.Random.Range(0, 11), UnityEngine.Random.Range(0, 11), 100);
 
             byte[] message = GetMessage(MessageType.connection, newChara.ToBytesArray());
 
             client.Send(message, message.Length, addressToConnect);
 
-
-            StartCoroutine(ConnectCheck());
-
         }
-        client.BeginReceive(callback, null);
-        
-      
-
-        
+        client.BeginReceive(callback, null);        
 	}
 
 	public void ReceiveCallback(IAsyncResult ar)
 	{
         try
         {
-            Debug.Log("Message reçu");
             IPEndPoint senderInfo = new IPEndPoint(0, 0);
 
             byte[] message = client.EndReceive(ar, ref senderInfo);
-
-             if (isHost)
-            {
-                if (disconnectRoutines.ContainsKey(senderInfo))
-                {
-                    StopCoroutine(disconnectRoutines[senderInfo]);
-                }
-            }       
 
             MessageType type = ParseMessageType(message);
 
@@ -129,12 +101,10 @@ public class NetworkManager : MonoBehaviour {
             switch (type)
             {
                 case MessageType.connection:
-                    if (!gameLaunched /*&& connectedClients.Count < roomSize*/)
-                    {
                         Character newCharacter = (Character)message.ToObject();
                         if (isHost)
                         {
-
+                            if(!gameLaunched && connectedClients.Count < roomSize)
                             message = GetMessage(MessageType.connection, newCharacter.ToBytesArray());
 
                             if (!connectedClients.ContainsKey(senderInfo))
@@ -149,23 +119,22 @@ public class NetworkManager : MonoBehaviour {
                             client.Send(message, message.Length, senderInfo);    
 
                             Debug.Log(newCharacter.GetName() + "S'est connecté");
-
+                            
                         }
                         else
                         {
                             if (newCharacter != null)
                             {
                                 otherCharacters.Add(newCharacter);
+                            MenuManager.instance.DisplayConnectedChars(newCharacter);
                             }
                             else
                             {
-                                //MainThreadExec.stuffToExecute.Enqueue(() => StopAllCoroutines());
                                 MenuManager.instance.ConnectSuccess();
                                 Debug.Log("On est bien connecté !");
 
                             }
                         }
-                    }
                     break;
                 case MessageType.disconnection:
                     Character disconnectedOne = (Character)message.ToObject();
@@ -187,24 +156,6 @@ public class NetworkManager : MonoBehaviour {
                     break;
             }
 
-            if (isHost)
-            {
-                MainThreadExec.stuffToExecute.Enqueue(() =>
-                {
-                    Coroutine routine = StartCoroutine(AfkDisconnect(senderInfo));
-
-
-                    if (disconnectRoutines.ContainsKey(senderInfo))
-                    {
-                        disconnectRoutines[senderInfo] = routine;
-                    }
-                    else
-                    {
-                        disconnectRoutines.Add(senderInfo, routine);
-                    }
-
-                });
-            }
             client.BeginReceive(callback, null);
         }
         catch (ObjectDisposedException)
