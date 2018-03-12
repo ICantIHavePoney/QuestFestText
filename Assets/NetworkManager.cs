@@ -10,26 +10,25 @@ using UnityEngine.UI;
 
 public class NetworkManager : MonoBehaviour {
 
-	private UdpClient client;
+    private UdpClient client;
 
     public static NetworkManager instance;
 
-	private int serverPort = 60;
+    private int serverPort = 60;
 
     private int clientPort = 6060;
 
-	private IPEndPoint addressToConnect;
+    private IPEndPoint addressToConnect;
 
     private string inputAddress;
 
-	public bool isHost;
+    public bool isHost;
 
-	private bool gameLaunched = false;
+    public bool gameLaunched = false;
 
+    private int id;
 
-    public int roomSize = 3;
-
-    public Character newChara;
+    public int roomSize;
 
     private Dictionary<IPEndPoint, Character> connectedClients;
 
@@ -38,58 +37,63 @@ public class NetworkManager : MonoBehaviour {
     public List<Character> otherCharacters;
 
     private AsyncCallback callback;
+    
+    private Coroutine answerCheck;
 
-    private bool isConnected = false;
+    private int failCount = 0;
 
-	void Awake()
-	{
-		connectedClients = new Dictionary<IPEndPoint, Character>();
+    void Awake()
+    {
+        connectedClients = new Dictionary<IPEndPoint, Character>();
         otherCharacters = new List<Character>();
 
         callback = new AsyncCallback(ReceiveCallback);
     }
 
-	// Use this for initialization
-	void Start () {
-        if(instance != this)
+    // Use this for initialization
+    void Start() {
+        if (instance != this)
         {
             Destroy(instance);
         }
 
+        roomSize = 3;
 
+
+        id = 0;
         instance = this;
-		Application.runInBackground = true;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	}
+        Application.runInBackground = true;
+    }
 
-	public void Init(){
+    // Update is called once per frame
+    void Update() {
+    }
+
+    public void Init() {
 
         if (isHost)
         {
             client = new UdpClient(serverPort);
+
         }
         else
         {
             client = new UdpClient(clientPort);
             addressToConnect = new IPEndPoint(IPAddress.Parse(inputAddress), serverPort);
 
-            newChara = new Character("Nayos", CharacterType.Player, UnityEngine.Random.Range(0, 11), UnityEngine.Random.Range(0, 11), UnityEngine.Random.Range(0, 11), 100);
-
-            byte[] message = GetMessage(MessageType.connection, newChara.ToBytesArray());
+            byte[] message = GetMessage(MessageType.connection, GameManager.instance.character.ToBytesArray());
 
             client.Send(message, message.Length, addressToConnect);
 
         }
-        client.BeginReceive(callback, null);        
-	}
+        client.BeginReceive(callback, null);
+    }
 
-	public void ReceiveCallback(IAsyncResult ar)
-	{
+    public void ReceiveCallback(IAsyncResult ar)
+    {
         try
         {
+
             IPEndPoint senderInfo = new IPEndPoint(0, 0);
 
             byte[] message = client.EndReceive(ar, ref senderInfo);
@@ -101,11 +105,18 @@ public class NetworkManager : MonoBehaviour {
             switch (type)
             {
                 case MessageType.connection:
-                        Character newCharacter = (Character)message.ToObject();
-                        if (isHost)
-                        {
-                            if(!gameLaunched && connectedClients.Count < roomSize)
-                            message = GetMessage(MessageType.connection, newCharacter.ToBytesArray());
+                    Character newCharacter = (Character)message.ToObject();
+                    if (isHost)
+                    {
+                        Debug.Log("Message recu");
+                        if (!gameLaunched && connectedClients.Count < roomSize)
+                        
+
+                            MainThreadExec.stuffToExecute.Enqueue(() => MenuManager.instance.DisplayConnectedChars(newCharacter));
+
+                            newCharacter.id = id;
+
+                            message = GetMessage(MessageType.connection, newCharacter.ToBytesArray());ZS
 
                             if (!connectedClients.ContainsKey(senderInfo))
                             {
@@ -114,27 +125,26 @@ public class NetworkManager : MonoBehaviour {
 
                             ServerToOthers(message, senderInfo);
 
-                            message = GetMessage(MessageType.connection, new byte[0]);
+                            message = GetMessage(MessageType.answer, BitConverter.GetBytes(id));
 
-                            client.Send(message, message.Length, senderInfo);    
+                            client.Send(message, message.Length, senderInfo);
+
+                            message = GetMessage(MessageType.newBoss, GameManager.instance.bossToFight.ToBytesArray());
+
+                            ServerToAll(message);
 
                             Debug.Log(newCharacter.GetName() + "S'est connecté");
-                            
-                        }
-                        else
+                        
+                    }
+                    else
+                    {
+                        if (newCharacter != null)
                         {
-                            if (newCharacter != null)
-                            {
-                                otherCharacters.Add(newCharacter);
+                            Debug.Log(newCharacter);
+                            otherCharacters.Add(newCharacter);
                             MenuManager.instance.DisplayConnectedChars(newCharacter);
-                            }
-                            else
-                            {
-                                MenuManager.instance.ConnectSuccess();
-                                Debug.Log("On est bien connecté !");
-
-                            }
                         }
+                    }
                     break;
                 case MessageType.disconnection:
                     Character disconnectedOne = (Character)message.ToObject();
@@ -150,9 +160,37 @@ public class NetworkManager : MonoBehaviour {
 
                     else
                     {
-                        Debug.Log("Vous avez été déconnecté");
                         otherCharacters.Remove(disconnectedOne);
                     }
+                    break;
+
+                case MessageType.newBoss:
+                    Character newBoss = (Character)message.ToObject();
+                    if (!isHost)
+                    {
+                        MainThreadExec.stuffToExecute.Enqueue(() =>
+                        {
+                            GameManager.instance.bossToFight = newBoss;
+                            MenuManager.instance.DisplayConnectedChars(newBoss);
+                        });
+                    }
+                    break;
+
+                case MessageType.answer:
+                    id = BitConverter.ToInt32(message, 0);
+                    if (!isHost)
+                    {
+
+                        if (id == 0)
+                        {
+                            MainThreadExec.stuffToExecute.Enqueue(() => StopCoroutine(answerCheck));
+                        }
+                        else
+                        {
+                            GameManager.instance.character.id = id;
+                        }
+                    }
+
                     break;
             }
 
@@ -162,12 +200,12 @@ public class NetworkManager : MonoBehaviour {
         {
             Debug.Log("Connection closed");
         }
-        catch(Exception err)
+        catch (Exception err)
         {
             Debug.Log(err);
         }
-		
-	}
+
+    }
 
     private IEnumerator AfkDisconnect(IPEndPoint clientIP)
     {
@@ -214,11 +252,38 @@ public class NetworkManager : MonoBehaviour {
     private IEnumerator ConnectCheck()
     {
         yield return new WaitForSeconds(10);
-        isConnected = false;
         addressToConnect = new IPEndPoint(0, 0);
         Debug.Log("L'adresse n'est pas bonne ou le serveur n'est pas en ligne");
         MenuManager.instance.ConnectFailed();
 
+    }
+
+    public void SendToServer(MessageType type, byte[] content = null)
+    {
+        byte[] message = BitConverter.GetBytes((int)type);
+
+        if (content != null)
+        {
+            content.CopyTo(message, message.Length);
+        }
+
+        answerCheck = StartCoroutine(AnswerCheck());
+
+        client.Send(message, message.Length, addressToConnect);
+    }
+
+
+    private IEnumerator AnswerCheck()
+    {
+        yield return new WaitForSeconds(10);
+        if(failCount < 3)
+        {
+            failCount++;
+        }
+        else
+        {
+            //DO Stuff
+        }
     }
 
     private void ServerToOthers(byte[] message, IPEndPoint clientToExclude){
@@ -234,7 +299,7 @@ public class NetworkManager : MonoBehaviour {
         }
 	}
 
-    private void ServerToAll(byte[] message)
+    public void ServerToAll(byte[] message)
     {
         foreach(var clientItem in connectedClients.Keys)
         {

@@ -21,6 +21,8 @@ public class Character  {
 
     public int health { get; set; }
 
+    public int id { get; set; }
+
     public int maxHealth { get; set; }
 
     public Character(string n, CharacterType t, int s, int a, int i, int h)

@@ -7,7 +7,10 @@ public enum MessageType{
 	connection,
 	disconnection,
     beginCombat,
-	attack
+	attack,
+    magic,
+    newBoss,
+    answer
 
 }
 
@@ -16,3 +19,4 @@ public enum CharacterType
     Player,
     Enemy
 }
+

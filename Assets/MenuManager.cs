@@ -68,6 +68,20 @@ public class MenuManager : MonoBehaviour {
     }
 
 
+    public void StartGame()
+    {
+        if (NetworkManager.instance.isHost)
+        {
+            NetworkManager.instance.gameLaunched = true;
+
+            NetworkManager.instance.ServerToAll(BitConverter.GetBytes((int)MessageType.beginCombat)) ;
+        }
+
+        LobbyPanel.SetActive(false);
+        GamePanel.SetActive(true);
+
+    }
+
     public void OnHostButtonClick()
     {
         NetworkManager.instance.isHost = true;
@@ -78,12 +92,18 @@ public class MenuManager : MonoBehaviour {
 
         startGame.SetActive(true);
 
+        GameManager.instance.CreateCharacter();
+
+        DisplayConnectedChars(GameManager.instance.bossToFight);
+
         NetworkManager.instance.Init();
     }
 
     public void OnConnectButtonClick()
     {
         NetworkManager.instance.isHost = false;
+
+        GameManager.instance.CreateCharacter();
 
         NetworkManager.instance.Init();
 
@@ -123,12 +143,15 @@ public class MenuManager : MonoBehaviour {
 
             LobbyPanel.SetActive(true);
 
-            foreach(var item in NetworkManager.instance.otherCharacters)
+
+
+            DisplayConnectedChars(GameManager.instance.character);
+
+            foreach (var item in NetworkManager.instance.otherCharacters)
             {
                 DisplayConnectedChars(item);
             }
 
-            DisplayConnectedChars(NetworkManager.instance.newChara);
             Debug.Log("C'est bon ! on charge le perso now !");
         });
     }

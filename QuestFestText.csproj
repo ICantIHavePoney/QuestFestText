@@ -81,6 +81,7 @@
     <Compile Include="Assets\Character.cs" />
     <Compile Include="Assets\CharacterPanel.cs" />
     <Compile Include="Assets\Enums.cs" />
+    <Compile Include="Assets\GameManager.cs" />
     <Compile Include="Assets\MainThreadExec.cs" />
     <Compile Include="Assets\MenuManager.cs" />
     <Compile Include="Assets\NetworkManager.cs" />
