@@ -5,7 +5,7 @@ Pitch : Jeu multijoueur censé être un petit RPG textuel, seul la partie "comba
 Objets synchronisés : Classe personnelle nommée "Character" faites, la classe "Quête" était censé être de la partie.
 
 
-##Système réseau
+## Système réseau
 
 Système de hosting chez un client, permettant d'éviter d'avoir un serveur distant, et permettant ainsi à l'hôte de rejoindre 
 la partie en tant que "Maitre du jeu". 
@@ -27,7 +27,7 @@ Réponse du serveur aux messages clients avec déconnection de la part du client
 Et inversement, déconnection des clients par le serveur si ceux si ne communiquent plus pendant un certains temps. 
 
 
-##Système de jeu
+## Système de jeu
 
 Une seule scène, en UI
 
