@@ -32,6 +32,8 @@ public class NetworkManager : MonoBehaviour {
 
     public Dictionary<IPEndPoint, Character> connectedClients;
 
+    public Dictionary<IPEndPoint, Coroutine> disconnectRoutines;
+
     private Character currentPlayer;
 
     private float serverLastMessage;
@@ -102,6 +104,11 @@ public class NetworkManager : MonoBehaviour {
             IPEndPoint senderInfo = new IPEndPoint(0, 0);
 
             byte[] message = client.EndReceive(ar, ref senderInfo);
+
+            if (isHost)
+            {
+                MainThreadExec.stuffToExecute.Enqueue(() => StopCoroutine(disconnectRoutines[senderInfo]));
+            }
 
             MessageType type = ParseMessageType(message);
 
@@ -244,6 +251,22 @@ public class NetworkManager : MonoBehaviour {
                     }
 
                     break;
+            }
+
+            if (isHost)
+            {
+                MainThreadExec.stuffToExecute.Enqueue(() =>
+                {
+                    Coroutine temp = StartCoroutine(AfkDisconnect(senderInfo));
+                    if (disconnectRoutines.ContainsKey(senderInfo))
+                    {
+                        disconnectRoutines[senderInfo] = temp;
+                    }
+                    else
+                    {
+                        disconnectRoutines.Add(senderInfo, temp);
+                    }
+                });
             }
 
             client.BeginReceive(callback, null);
