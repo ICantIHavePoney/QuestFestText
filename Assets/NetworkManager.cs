@@ -30,7 +30,9 @@ public class NetworkManager : MonoBehaviour {
 
     public int roomSize;
 
-    private Dictionary<IPEndPoint, Character> connectedClients;
+    public Dictionary<IPEndPoint, Character> connectedClients;
+
+    private Character currentPlayer;
 
     private float serverLastMessage;
 
@@ -60,7 +62,7 @@ public class NetworkManager : MonoBehaviour {
         roomSize = 3;
 
 
-        id = 0;
+        id = 1;
         instance = this;
         Application.runInBackground = true;
     }
@@ -83,7 +85,10 @@ public class NetworkManager : MonoBehaviour {
 
             byte[] message = GetMessage(MessageType.connection, GameManager.instance.character.ToBytesArray());
 
+
             client.Send(message, message.Length, addressToConnect);
+
+            answerCheck = StartCoroutine(AnswerCheck());
 
         }
         client.BeginReceive(callback, null);
@@ -108,15 +113,14 @@ public class NetworkManager : MonoBehaviour {
                     Character newCharacter = (Character)message.ToObject();
                     if (isHost)
                     {
-                        Debug.Log("Message recu");
-                        if (!gameLaunched && connectedClients.Count < roomSize)
+                        if (!gameLaunched && connectedClients.Count < roomSize) { }
                         
 
                             MainThreadExec.stuffToExecute.Enqueue(() => MenuManager.instance.DisplayConnectedChars(newCharacter));
 
                             newCharacter.id = id;
 
-                            message = GetMessage(MessageType.connection, newCharacter.ToBytesArray());ZS
+                            message = GetMessage(MessageType.connection, newCharacter.ToBytesArray());
 
                             if (!connectedClients.ContainsKey(senderInfo))
                             {
@@ -129,11 +133,13 @@ public class NetworkManager : MonoBehaviour {
 
                             client.Send(message, message.Length, senderInfo);
 
+                            id++;
+
                             message = GetMessage(MessageType.newBoss, GameManager.instance.bossToFight.ToBytesArray());
 
                             ServerToAll(message);
 
-                            Debug.Log(newCharacter.GetName() + "S'est connecté");
+                            Debug.Log(newCharacter.GetName() + " S'est connecté");
                         
                     }
                     else
@@ -142,7 +148,7 @@ public class NetworkManager : MonoBehaviour {
                         {
                             Debug.Log(newCharacter);
                             otherCharacters.Add(newCharacter);
-                            MenuManager.instance.DisplayConnectedChars(newCharacter);
+                            MainThreadExec.stuffToExecute.Enqueue(() => MenuManager.instance.DisplayConnectedChars(newCharacter));
                         }
                     }
                     break;
@@ -155,7 +161,7 @@ public class NetworkManager : MonoBehaviour {
                         ServerToOthers(message, senderInfo);
                         connectedClients.Remove(senderInfo);
 
-                        Debug.Log(disconnectedOne.GetName() + "S'est déconnecté");
+                        Debug.Log(disconnectedOne.GetName() + " S'est déconnecté");
                     }
 
                     else
@@ -176,19 +182,30 @@ public class NetworkManager : MonoBehaviour {
                     }
                     break;
 
+                case MessageType.beginCombat:
+                    if (!isHost)
+                    {
+                        MainThreadExec.stuffToExecute.Enqueue(() =>
+                        {
+                            MenuManager.instance.GameMenuPanel.SetActive(true);
+                        });
+                    }
+                    break;
+
                 case MessageType.answer:
                     id = BitConverter.ToInt32(message, 0);
                     if (!isHost)
-                    {
-
+                    {             
                         if (id == 0)
                         {
-                            MainThreadExec.stuffToExecute.Enqueue(() => StopCoroutine(answerCheck));
+                            
                         }
                         else
                         {
                             GameManager.instance.character.id = id;
+                            MenuManager.instance.ConnectSuccess();
                         }
+                        MainThreadExec.stuffToExecute.Enqueue(() => StopCoroutine(answerCheck));
                     }
 
                     break;
@@ -247,15 +264,6 @@ public class NetworkManager : MonoBehaviour {
         MessageType type = (MessageType)BitConverter.ToInt32(messageTypeArray, 0);
 
         return type;
-    }
-
-    private IEnumerator ConnectCheck()
-    {
-        yield return new WaitForSeconds(10);
-        addressToConnect = new IPEndPoint(0, 0);
-        Debug.Log("L'adresse n'est pas bonne ou le serveur n'est pas en ligne");
-        MenuManager.instance.ConnectFailed();
-
     }
 
     public void SendToServer(MessageType type, byte[] content = null)

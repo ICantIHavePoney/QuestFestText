@@ -16,7 +16,7 @@ public class MenuManager : MonoBehaviour {
 
     public GameObject startGame;
 
-    public GameObject LobbyPanel;
+    public GameObject GameMenuPanel;
 
     public GameObject GamePanel;
 
@@ -74,12 +74,12 @@ public class MenuManager : MonoBehaviour {
         {
             NetworkManager.instance.gameLaunched = true;
 
-            NetworkManager.instance.ServerToAll(BitConverter.GetBytes((int)MessageType.beginCombat)) ;
+            NetworkManager.instance.ServerToAll(BitConverter.GetBytes((int)MessageType.beginCombat));
+
+            startGame.SetActive(false);
+
+            GameMenuPanel.SetActive(true);
         }
-
-        LobbyPanel.SetActive(false);
-        GamePanel.SetActive(true);
-
     }
 
     public void OnHostButtonClick()
@@ -88,7 +88,7 @@ public class MenuManager : MonoBehaviour {
 
         MainMenuPanel.SetActive(false);
 
-        LobbyPanel.SetActive(true);
+        GamePanel.SetActive(true);
 
         startGame.SetActive(true);
 
@@ -141,7 +141,7 @@ public class MenuManager : MonoBehaviour {
 
             MainMenuPanel.SetActive(false);
 
-            LobbyPanel.SetActive(true);
+            GamePanel.SetActive(true);
 
 
 

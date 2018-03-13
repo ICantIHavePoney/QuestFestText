@@ -20,12 +20,20 @@ public class CharacterPanel : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+        if (!NetworkManager.instance.isHost)
+        {
+            character = GameManager.instance.character;
+        }
+        else
+        {
+            character = GameManager.instance.bossToFight;
+        }
+        DisplayCharacter();
 	}
 
 

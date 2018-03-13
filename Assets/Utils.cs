@@ -48,4 +48,15 @@ public static class Utils {
 
         return slicedArray;
     }
+
+
+    public static T[] ConcatArray<T>(this T[] firstArray, T[] secondArray)
+    {
+        T[] concatenedArray = new T[firstArray.Length + secondArray.Length];
+
+        firstArray.CopyTo(concatenedArray, 0);
+        secondArray.CopyTo(concatenedArray, firstArray.Length);
+
+        return concatenedArray;
+    }
 }

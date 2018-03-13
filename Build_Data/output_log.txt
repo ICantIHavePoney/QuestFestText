@@ -2,13 +2,13 @@ Mono path[0] = 'C:/Users/Nayos/Documents/QuestFestText/Build_Data/Managed'
 Mono path[1] = 'C:/Users/Nayos/Documents/QuestFestText/Build_Data/Mono'
 Mono config path = 'C:/Users/Nayos/Documents/QuestFestText/Build_Data/Mono/etc'
 PlayerConnection initialized from C:/Users/Nayos/Documents/QuestFestText/Build_Data (debug = 0)
-PlayerConnection initialized network socket : 0.0.0.0 55346
-Multi-casting "[IP] 192.168.1.11 [Port] 55346 [Flags] 3 [Guid] 2923199994 [EditorId] 4132784951 [Version] 1048832 [Id] WindowsPlayer(The-last-Crusader) [Debug] 1" to [225.0.0.222:54997]...
-Waiting for connection from host on [0.0.0.0:55346]...
-PlayerConnection accepted from [192.168.1.11] handle:0x380
-Started listening to [0.0.0.0:55346]
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,defer=y,address=0.0.0.0:56994
-PlayerConnection already initialized - listening to [0.0.0.0:55346]
+PlayerConnection initialized network socket : 0.0.0.0 55287
+Multi-casting "[IP] 192.168.1.11 [Port] 55287 [Flags] 3 [Guid] 3983998955 [EditorId] 4132784951 [Version] 1048832 [Id] WindowsPlayer(The-last-Crusader) [Debug] 1" to [225.0.0.222:54997]...
+Waiting for connection from host on [0.0.0.0:55287]...
+PlayerConnection accepted from [192.168.1.11] handle:0x378
+Started listening to [0.0.0.0:55287]
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,defer=y,address=0.0.0.0:56955
+PlayerConnection already initialized - listening to [0.0.0.0:55287]
 Player data archive not found at `C:/Users/Nayos/Documents/QuestFestText/Build_Data/data.unity3d`, using local filesystemInitialize engine version: 5.6.1f1 (2860b30f0b54)
 GfxDevice: creating device client; threaded=1
 Direct3D:
@@ -33,12 +33,12 @@ desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 1.229111 ms
+UnloadTime: 1.199758 ms
 Setting up 6 worker threads for Enlighten.
-  Thread -> id: 4cb0 -> priority: 1 
-  Thread -> id: 4b40 -> priority: 1 
-  Thread -> id: 474 -> priority: 1 
-  Thread -> id: 46f0 -> priority: 1 
-  Thread -> id: 2c6c -> priority: 1 
-  Thread -> id: 46d4 -> priority: 1 
+  Thread -> id: 2290 -> priority: 1 
+  Thread -> id: 4bb0 -> priority: 1 
+  Thread -> id: 1094 -> priority: 1 
+  Thread -> id: 51f4 -> priority: 1 
+  Thread -> id: 22f0 -> priority: 1 
+  Thread -> id: 1fe4 -> priority: 1 
 Waiting for finish

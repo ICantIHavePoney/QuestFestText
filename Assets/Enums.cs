@@ -10,7 +10,8 @@ public enum MessageType{
 	attack,
     magic,
     newBoss,
-    answer
+    answer,
+    throwAttack
 
 }
 

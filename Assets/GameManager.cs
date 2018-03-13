@@ -6,7 +6,13 @@ public class GameManager : MonoBehaviour {
 
     public Character bossToFight;
 
+    private int target;
+
+    private bool canAttack;
+
     public static GameManager instance;
+
+    public GameObject characterDisplay;
 
     public Character character;
 
@@ -23,6 +29,45 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 		
 	}
+
+
+    public void Attack()
+    {
+        if (NetworkManager.instance.isHost)
+        {
+            
+        }
+        if (canAttack)
+        {
+            NetworkManager.instance.SendToServer(MessageType.attack);
+        }
+    }
+
+
+    public void Magic()
+    {
+
+    }
+
+    public void Throw()
+    {
+
+    }
+
+    public void UpdateCharacters(MessageType attackType)
+    {
+
+    }
+
+
+    public IEnumerator reloadTime()
+    {
+
+        yield return new WaitForSeconds(10);
+
+        canAttack = true;
+    }
+
 
     public void CreateCharacter()
     {
