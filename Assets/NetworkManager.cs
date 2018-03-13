@@ -192,15 +192,50 @@ public class NetworkManager : MonoBehaviour {
                     }
                     break;
 
+
+                case MessageType.attack:
+                    if (isHost)
+                    {
+                        Character attacker = connectedClients[senderInfo];
+
+                        GameManager.instance.character.health -= GameManager.instance.DamagesCalculations(attacker, GetAttackType(message));
+
+                        client.Send(BitConverter.GetBytes((int)MessageType.answer), BitConverter.GetBytes((int)MessageType.answer).Length, senderInfo);
+
+                        ServerToAll(GetMessage(MessageType.attack, GameManager.instance.character.ToBytesArray()));
+                    }
+                    else
+                    {
+                        Character victim = (Character)message.ToObject();
+                        if (victim.type == CharacterType.Enemy)
+                        {
+                            GameManager.instance.bossToFight = victim;
+                        }
+                        else
+                        {
+                            if (victim.id != GameManager.instance.character.id)
+                            {                    
+                                for (int i = 0; i < otherCharacters.Count; i++)
+                                {
+                                    if (victim.id == otherCharacters[i].id)
+                                    {
+                                        otherCharacters[i] = victim;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                GameManager.instance.character = victim;
+                            }
+                        }
+                    }
+                     break;
                 case MessageType.answer:
                     id = BitConverter.ToInt32(message, 0);
                     if (!isHost)
-                    {             
-                        if (id == 0)
-                        {
-                            
-                        }
-                        else
+                    {
+
+                        if (id != 0)
                         {
                             GameManager.instance.character.id = id;
                             MenuManager.instance.ConnectSuccess();
@@ -240,6 +275,15 @@ public class NetworkManager : MonoBehaviour {
 
     }
 
+
+    private AttackType GetAttackType(byte[] message)
+    {
+        byte[] attackTypeArray = new byte[4];
+
+        Array.Copy(message, 0, attackTypeArray, 0, attackTypeArray.Length);
+
+        return (AttackType)BitConverter.ToInt32(attackTypeArray, 0);
+    }
 
 
     public byte[] GetMessage(MessageType type, byte[] contentArray)

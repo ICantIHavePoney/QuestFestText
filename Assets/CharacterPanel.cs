@@ -25,15 +25,7 @@ public class CharacterPanel : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (!NetworkManager.instance.isHost)
-        {
-            character = GameManager.instance.character;
-        }
-        else
-        {
-            character = GameManager.instance.bossToFight;
-        }
-        DisplayCharacter();
+
 	}
 
 

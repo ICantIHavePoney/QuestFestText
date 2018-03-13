@@ -8,13 +8,17 @@ public enum MessageType{
 	disconnection,
     beginCombat,
 	attack,
-    magic,
     newBoss,
     answer,
-    throwAttack
 
 }
 
+public enum AttackType
+{
+    Contact,
+    Magical,
+    Ranged
+}
 public enum CharacterType
 {
     Player,

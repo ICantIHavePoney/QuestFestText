@@ -13,11 +13,11 @@ public class Character  {
 
     public CharacterType type;
 
-    public int strenght { get; set; }
+    public float strenght { get; set; }
 
-    public int agility { get; set; }
+    public float agility { get; set; }
 
-    public int intelligence { get; set; }
+    public float intelligence { get; set; }
 
     public int health { get; set; }
 
